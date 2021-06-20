@@ -4,8 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.nasadatasetdemo.R
 import com.example.nasadatasetdemo.databinding.FragmentHomeBinding
 import com.example.nasadatasetdemo.view.base.BaseFragment
 
@@ -22,7 +23,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     private fun setListener() {
         binding.request.setOnClickListener {
-            Toast.makeText(activity, "request", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_homeFragment_to_galleryFragment)
         }
     }
 
