@@ -2,6 +2,7 @@ package com.example.nasadatasetdemo.view.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.nasadatasetdemo.view.home.HomeViewModel
 import com.example.nasadatasetdemo.view.main.MainViewModel
 
 class ViewModelFactory(): ViewModelProvider.NewInstanceFactory() {
@@ -13,6 +14,9 @@ class ViewModelFactory(): ViewModelProvider.NewInstanceFactory() {
             }
 
             // All Fragments
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
+                HomeViewModel() as T
+            }
 
             else -> throw IllegalArgumentException("Unknown ViewModel Class.")
         }
