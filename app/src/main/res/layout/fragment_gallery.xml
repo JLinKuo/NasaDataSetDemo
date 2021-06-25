@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.gallery.GalleryFragment">
-
-    <TextView
+    tools:context=".view.gallery.GalleryFragment"
+    >
+    <LinearLayout
+        android:id="@+id/title_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="gallery fragment" />
+        android:layout_height="?actionBarSize"
+        android:background="@color/gray_A"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            android:background="@android:color/transparent"
+            android:drawableStart="@drawable/ic_back"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:textColor="@color/light_blue"
+            android:text="@string/back"
+            />
+    </LinearLayout>
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/title_layout"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

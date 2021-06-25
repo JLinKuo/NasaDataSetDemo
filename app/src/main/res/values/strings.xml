@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">NasaDataSetDemo</string>
 
+    <string name="back">Back</string>
+
     <string name="dialog_please_wait">請稍待....</string>
 
     <string name="home_title">Astronomy Picture of the Day</string>
