@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.nasadatasetdemo.model.repository.GalleryRepository
 import com.example.nasadatasetdemo.view.base.BaseViewModel
+import com.example.nasadatasetdemo.view.pojo.NasaBitmapPojo
 import com.example.nasadatasetdemo.view.pojo.NasaItemPojo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,6 +59,20 @@ class GalleryViewModel: BaseViewModel() {
                         )
                     )
                 }
+            }
+        }
+    }
+
+    private var _getNasaBitmapResponse = MutableLiveData<NasaBitmapPojo>()
+    val getNasaBitmapResponse: LiveData<NasaBitmapPojo>
+        get() = _getNasaBitmapResponse
+
+    fun getNasaBitmap(position: Int, urlString: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repository.getNasaHttpBitmap(urlString)
+
+            withContext(Dispatchers.Main) {
+                _getNasaBitmapResponse.value = NasaBitmapPojo(position, result)
             }
         }
     }

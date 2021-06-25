@@ -1,5 +1,7 @@
 package com.example.nasadatasetdemo.model.network
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import java.io.BufferedReader
 import java.io.InputStream
@@ -31,5 +33,24 @@ object Network {
         }
 
         return result
+    }
+
+    fun httpGetBitmap(url: String): Bitmap? {
+        var inputStream: InputStream? = null
+        var bitmap: Bitmap? = null
+
+        try {
+            val conn: HttpsURLConnection = URL(url).openConnection() as HttpsURLConnection
+            conn.connect()
+
+            bitmap = BitmapFactory.decodeStream(conn.inputStream)
+
+        }catch(ex: Exception) {
+            Log.d("JLin", "Error when executing get request: " + ex.localizedMessage)
+        } finally {
+            inputStream?.close()
+        }
+
+        return bitmap
     }
 }
