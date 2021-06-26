@@ -1,14 +1,13 @@
 package com.example.nasadatasetdemo.view.gallery
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.nasadatasetdemo.model.repository.GalleryRepository
 import com.example.nasadatasetdemo.view.base.BaseViewModel
-import com.example.nasadatasetdemo.view.pojo.NasaBitmapPojo
-import com.example.nasadatasetdemo.view.pojo.NasaItemPojo
+import com.example.nasadatasetdemo.model.pojo.NasaBitmapPojo
+import com.example.nasadatasetdemo.model.pojo.NasaItemPojo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

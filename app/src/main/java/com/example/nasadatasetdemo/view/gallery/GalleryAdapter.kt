@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasadatasetdemo.databinding.ViewListGalleryItemBinding
-import com.example.nasadatasetdemo.view.pojo.NasaItemPojo
+import com.example.nasadatasetdemo.model.pojo.NasaItemPojo
 
 class GalleryAdapter(
         private val listener: ItemSelectListener

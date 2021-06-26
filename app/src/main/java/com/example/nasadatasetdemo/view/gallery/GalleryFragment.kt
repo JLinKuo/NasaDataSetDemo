@@ -1,7 +1,6 @@
 package com.example.nasadatasetdemo.view.gallery
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasadatasetdemo.databinding.FragmentGalleryBinding
 import com.example.nasadatasetdemo.view.base.BaseFragment
-import com.example.nasadatasetdemo.view.pojo.NasaItemPojo
+import com.example.nasadatasetdemo.model.pojo.NasaItemPojo
 
 /**
  * A simple [Fragment] subclass.

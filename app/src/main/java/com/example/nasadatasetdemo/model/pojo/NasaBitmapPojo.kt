@@ -1,4 +1,4 @@
-package com.example.nasadatasetdemo.view.pojo
+package com.example.nasadatasetdemo.model.pojo
 
 import android.graphics.Bitmap
 
