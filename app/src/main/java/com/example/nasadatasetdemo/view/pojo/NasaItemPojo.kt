@@ -12,5 +12,6 @@ data class NasaItemPojo(
     val media_type: String,
     val hdUrl: String,
 
+    var isLoadingBitmap: Boolean = false,
     var thumbnailBitmap: Bitmap? = null
 )

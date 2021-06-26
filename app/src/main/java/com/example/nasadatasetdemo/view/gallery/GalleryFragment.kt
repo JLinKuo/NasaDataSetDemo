@@ -1,6 +1,7 @@
 package com.example.nasadatasetdemo.view.gallery
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,9 +70,9 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
 
     private fun getNasaBitmap(firstIndex: Int, lastIndex: Int) {
         currBitmapIndex = firstIndex
-
         while(currBitmapIndex <= lastIndex) {
-            if(listNasaData[currBitmapIndex].thumbnailBitmap == null) {
+            if(!listNasaData[currBitmapIndex].isLoadingBitmap) {
+                listNasaData[currBitmapIndex].isLoadingBitmap = true
                 viewModel.getNasaBitmap(currBitmapIndex,
                         listNasaData[currBitmapIndex].thumbnailUrl)
             }
