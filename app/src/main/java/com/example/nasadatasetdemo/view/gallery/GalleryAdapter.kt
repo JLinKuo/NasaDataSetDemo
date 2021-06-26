@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.nasadatasetdemo.databinding.ViewListGalleryItemBinding
 import com.example.nasadatasetdemo.view.pojo.NasaItemPojo
 
-class GalleryAdapter: RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
+class GalleryAdapter(
+        private val listener: ItemSelectListener
+): RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
     private val listNasaData by lazy { ArrayList<NasaItemPojo>() }
 
@@ -22,6 +24,10 @@ class GalleryAdapter: RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
             holder.binding.image.setImageBitmap(listNasaData[position].thumbnailBitmap)
         } else {
             holder.binding.image.setImageBitmap(null)
+        }
+
+        holder.itemView.setOnClickListener {
+            listener.onItemSelected(holder.adapterPosition)
         }
     }
 
@@ -39,4 +45,8 @@ class GalleryAdapter: RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(val binding: ViewListGalleryItemBinding): RecyclerView.ViewHolder(binding.root)
+
+    interface ItemSelectListener{
+        fun onItemSelected(position: Int)
+    }
 }

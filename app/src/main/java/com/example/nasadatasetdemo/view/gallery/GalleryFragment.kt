@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasadatasetdemo.databinding.FragmentGalleryBinding
@@ -19,7 +21,12 @@ private const val DEFAULT_BITMAP_AMOUNT = 48
 
 class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>() {
 
-    private val listAdapter by lazy { GalleryAdapter() }
+    private val listAdapter by lazy { GalleryAdapter(
+            object: GalleryAdapter.ItemSelectListener{
+        override fun onItemSelected(position: Int) {
+            Toast.makeText(activity, "position: $position", Toast.LENGTH_SHORT).show()
+        }
+    }) }
     private val listNasaData by lazy { ArrayList<NasaItemPojo>() }
 
     private var currBitmapIndex = 0
@@ -29,6 +36,7 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
 
         getNasaData()
         setView()
+        setListener()
         setObserver()
     }
 
@@ -78,6 +86,12 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
             }
 
             currBitmapIndex += 1
+        }
+    }
+
+    private fun setListener() {
+        binding.back.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
