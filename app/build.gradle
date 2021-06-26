@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    // Navigation Component pass argument
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
