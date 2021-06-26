@@ -7,26 +7,34 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.nasadatasetdemo.databinding.ViewListGalleryItemBinding
 import com.example.nasadatasetdemo.view.pojo.NasaItemPojo
 
-class GalleryAdapter(
-    private val list: List<NasaItemPojo>
-): RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
+class GalleryAdapter: RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
+
+    private val listNasaData by lazy { ArrayList<NasaItemPojo>() }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(ViewListGalleryItemBinding.inflate(LayoutInflater.from(parent.context),
                 parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.title.text = list[position].title
+        holder.binding.title.text = listNasaData[position].title
 
-        list[position].thumbnailBitmap?.let {
-            holder.binding.image.setImageBitmap(it)
+        if(listNasaData[position].thumbnailBitmap != null) {
+            holder.binding.image.setImageBitmap(listNasaData[position].thumbnailBitmap)
+        } else {
+            holder.binding.image.setImageBitmap(null)
         }
     }
 
-    override fun getItemCount() = list.size
+    override fun getItemCount() = listNasaData.size
+
+    fun setListNasaData(list: ArrayList<NasaItemPojo>) {
+        listNasaData.clear()
+        listNasaData.addAll(list)
+        notifyDataSetChanged()
+    }
 
     fun setItemBitmap(position: Int, bitmap: Bitmap) {
-        list[position].thumbnailBitmap = bitmap
+        listNasaData[position].thumbnailBitmap = bitmap
         notifyItemChanged(position)
     }
 
