@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.nasadatasetdemo.databinding.FragmentGalleryBinding
 import com.example.nasadatasetdemo.view.base.BaseFragment
 import com.example.nasadatasetdemo.view.pojo.NasaItemPojo
@@ -14,15 +14,25 @@ import com.example.nasadatasetdemo.view.pojo.NasaItemPojo
 /**
  * A simple [Fragment] subclass.
  */
+private const val DEFAULT_BITMAP_AMOUNT = 48
+
 class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>() {
 
-    private lateinit var listAdapter: GalleryAdapter
+    private val listAdapter by lazy { GalleryAdapter() }
+    private val listNasaData by lazy { ArrayList<NasaItemPojo>() }
+
+    private var currBitmapIndex = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         getNasaData()
+        setView()
         setObserver()
+    }
+
+    private fun setView() {
+        setRecyclerView()
     }
 
     private fun getNasaData() {
@@ -30,26 +40,59 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
         viewModel.getNasaData()
     }
 
-    private fun setRecyclerView(list: List<NasaItemPojo>) {
-        binding.recyclerview.layoutManager = GridLayoutManager(activity, 4)
-        listAdapter = GalleryAdapter(list)
+    private fun setRecyclerView() {
+        val layoutManager = GridLayoutManager(activity, 4)
+        binding.recyclerview.layoutManager = layoutManager
         binding.recyclerview.adapter = listAdapter
         binding.recyclerview.addItemDecoration(GalleryItemDecoration(activity))
 
-        for(i in list.indices) {
-            viewModel.getNasaBitmap(i, list[i].thumbnailUrl)
+        binding.recyclerview.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            private var firstVisibleItemPosition = 0
+            private var lastVisibleItemPosition = 0
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        lastVisibleItemPosition <= listNasaData.size) {
+
+                    getNasaBitmap(firstVisibleItemPosition, lastVisibleItemPosition)
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+            }
+        })
+    }
+
+    private fun getNasaBitmap(firstIndex: Int, lastIndex: Int) {
+        currBitmapIndex = firstIndex
+
+        while(currBitmapIndex <= lastIndex) {
+            if(listNasaData[currBitmapIndex].thumbnailBitmap == null) {
+                viewModel.getNasaBitmap(currBitmapIndex,
+                        listNasaData[currBitmapIndex].thumbnailUrl)
+            }
+
+            currBitmapIndex += 1
         }
     }
 
     private fun setObserver() {
         viewModel.getNasaDataResponse.observe(viewLifecycleOwner) {
             activity.dismissProgressBar()
+            listNasaData.clear()
+            listNasaData.addAll(it)
 
-            setRecyclerView(it)
+            listAdapter.setListNasaData(listNasaData)
+            getNasaBitmap(0, DEFAULT_BITMAP_AMOUNT)   // 先取得前48筆資料
         }
 
         viewModel.getNasaBitmapResponse.observe(viewLifecycleOwner) {
             it.bitmap?.let { bitmap ->
+                listNasaData[it.position].thumbnailBitmap = bitmap
                 listAdapter.setItemBitmap(it.position, bitmap)
             }
         }
