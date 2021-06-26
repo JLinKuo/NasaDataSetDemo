@@ -1,5 +1,7 @@
 package com.example.nasadatasetdemo.view.gallery
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -72,8 +74,17 @@ class GalleryViewModel: BaseViewModel() {
             val result = repository.getNasaHttpBitmap(urlString)
 
             withContext(Dispatchers.Main) {
-                _getNasaBitmapResponse.value = NasaBitmapPojo(position, result)
+                _getNasaBitmapResponse.value = NasaBitmapPojo(position, resizeResultBitmap(result))
             }
         }
+    }
+
+    private fun resizeResultBitmap(bitmap: Bitmap?): Bitmap? {
+        bitmap?.let {
+            val scaleSize = (it.width * 0.1).toInt()
+            return Bitmap.createScaledBitmap(it, scaleSize, scaleSize, true)
+        }
+
+        return null
     }
 }
