@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasadatasetdemo.databinding.FragmentGalleryBinding
 import com.example.nasadatasetdemo.view.base.BaseFragment
-import com.example.nasadatasetdemo.model.pojo.NasaItemPojo
 import com.example.nasadatasetdemo.view.bean.NasaItemBean
 
 /**
@@ -26,19 +25,18 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
             findNavController().navigate(
                 GalleryFragmentDirections.actionGalleryFragmentToDetailFragment(
                     NasaItemBean(
-                        description = listNasaData[position].description,
-                        copyright = listNasaData[position].copyright,
-                        title = listNasaData[position].title,
-                        apod_site = listNasaData[position].apod_site,
-                        date = listNasaData[position].date,
-                        media_type = listNasaData[position].media_type,
-                        hdUrl = listNasaData[position].hdUrl
+                        description = viewModel.listNasaData[position].description,
+                        copyright = viewModel.listNasaData[position].copyright,
+                        title = viewModel.listNasaData[position].title,
+                        apod_site = viewModel.listNasaData[position].apod_site,
+                        date = viewModel.listNasaData[position].date,
+                        media_type = viewModel.listNasaData[position].media_type,
+                        hdUrl = viewModel.listNasaData[position].hdUrl
                     )
                 )
             )
         }
     }) }
-    private val listNasaData by lazy { ArrayList<NasaItemPojo>() }
 
     private var currBitmapIndex = 0
 
@@ -57,7 +55,9 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
 
     private fun getNasaData() {
         activity.showProgressBar(true)
-        viewModel.getNasaData()
+        if(!viewModel.isGetNasaData) {
+            viewModel.getNasaData()
+        }
     }
 
     private fun setRecyclerView() {
@@ -73,7 +73,7 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if(newState == RecyclerView.SCROLL_STATE_IDLE &&
-                        lastVisibleItemPosition <= listNasaData.size) {
+                        lastVisibleItemPosition <= viewModel.listNasaData.size) {
 
                     getNasaBitmap(firstVisibleItemPosition, lastVisibleItemPosition)
                 }
@@ -90,10 +90,10 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
     private fun getNasaBitmap(firstIndex: Int, lastIndex: Int) {
         currBitmapIndex = firstIndex
         while(currBitmapIndex <= lastIndex) {
-            if(!listNasaData[currBitmapIndex].isLoadingBitmap) {
-                listNasaData[currBitmapIndex].isLoadingBitmap = true
+            if(!viewModel.listNasaData[currBitmapIndex].isLoadingBitmap) {
+                viewModel.listNasaData[currBitmapIndex].isLoadingBitmap = true
                 viewModel.getNasaBitmap(currBitmapIndex,
-                        listNasaData[currBitmapIndex].thumbnailUrl)
+                    viewModel.listNasaData[currBitmapIndex].thumbnailUrl)
             }
 
             currBitmapIndex += 1
@@ -108,17 +108,18 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
 
     private fun setObserver() {
         viewModel.getNasaDataResponse.observe(viewLifecycleOwner) {
+            viewModel.isGetNasaData = true
             activity.dismissProgressBar()
-            listNasaData.clear()
-            listNasaData.addAll(it)
+            viewModel.listNasaData.clear()
+            viewModel.listNasaData.addAll(it)
 
-            listAdapter.setListNasaData(listNasaData)
+            listAdapter.setListNasaData(viewModel.listNasaData)
             getNasaBitmap(0, DEFAULT_BITMAP_AMOUNT)   // 先取得前48筆資料
         }
 
         viewModel.getNasaBitmapResponse.observe(viewLifecycleOwner) {
             it.bitmap?.let { bitmap ->
-                listNasaData[it.position].thumbnailBitmap = bitmap
+                viewModel.listNasaData[it.position].thumbnailBitmap = bitmap
                 listAdapter.setItemBitmap(it.position, bitmap)
             }
         }

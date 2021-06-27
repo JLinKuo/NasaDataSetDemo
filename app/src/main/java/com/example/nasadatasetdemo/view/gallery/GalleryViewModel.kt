@@ -25,6 +25,9 @@ private const val JSON_KEY_HD_URL = "hdurl"
 class GalleryViewModel: BaseViewModel() {
     private val repository = GalleryRepository()
 
+    val listNasaData by lazy { ArrayList<NasaItemPojo>() }
+    var isGetNasaData = false
+
     private var _getNasaDataResponse = MutableLiveData<ArrayList<NasaItemPojo>>()
     val getNasaDataResponse: LiveData<ArrayList<NasaItemPojo>>
         get() = _getNasaDataResponse
