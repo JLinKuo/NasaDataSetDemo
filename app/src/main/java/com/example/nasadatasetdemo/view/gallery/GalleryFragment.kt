@@ -107,6 +107,11 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
     }
 
     private fun setObserver() {
+        setNasaDataResponseObserver()
+        setNasaBitmapResponseObserver()
+    }
+
+    private fun setNasaDataResponseObserver() {
         viewModel.getNasaDataResponse.observe(viewLifecycleOwner) {
             viewModel.isGetNasaData = true
             activity.dismissProgressBar()
@@ -116,7 +121,9 @@ class GalleryFragment : BaseFragment<FragmentGalleryBinding, GalleryViewModel>()
             listAdapter.setListNasaData(viewModel.listNasaData)
             getNasaBitmap(0, DEFAULT_BITMAP_AMOUNT)   // 先取得前48筆資料
         }
+    }
 
+    private fun setNasaBitmapResponseObserver() {
         viewModel.getNasaBitmapResponse.observe(viewLifecycleOwner) {
             it.bitmap?.let { bitmap ->
                 viewModel.listNasaData[it.position].thumbnailBitmap = bitmap
