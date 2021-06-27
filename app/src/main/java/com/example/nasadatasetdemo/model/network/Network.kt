@@ -12,45 +12,34 @@ private const val NASA_DATA_URL = "https://raw.githubusercontent.com/cmmobile/Na
 
 object Network {
     fun httpGetString(): String {
-        var inputStream: InputStream? = null
-        var result = ""
-
-        try {
-            val url = URL(NASA_DATA_URL)
-            val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection
-
-            conn.connect()
-            inputStream = conn.inputStream
-
-            return inputStream?.bufferedReader()?.use(BufferedReader::readText) ?: "error: inputStream is null"
-
-        } catch(ex: Exception) {
-            Log.d("JLin", "exception @ httpGetString: " + ex.message)
-
-        } finally {
-            inputStream?.close()
-
+        httpConnect(NASA_DATA_URL)?.let {
+            return it.bufferedReader().use(BufferedReader::readText).apply {
+                it.close()
+            }
         }
-
-        return result
+        return "error: inputStream is null"
     }
 
-    fun httpGetBitmap(url: String): Bitmap? {
+    fun httpGetBitmap(strUrl: String): Bitmap? {
+        httpConnect(strUrl)?.let {
+            return BitmapFactory.decodeStream(it).apply {
+                it.close()
+            }
+        }
+        return null
+    }
+
+    private fun httpConnect(strUrl: String): InputStream? {
         var inputStream: InputStream? = null
-        var bitmap: Bitmap? = null
 
         try {
-            val conn: HttpsURLConnection = URL(url).openConnection() as HttpsURLConnection
+            val conn: HttpsURLConnection = URL(strUrl).openConnection() as HttpsURLConnection
             conn.connect()
-
-            bitmap = BitmapFactory.decodeStream(conn.inputStream)
-
-        }catch(ex: Exception) {
-            Log.d("JLin", "Error when executing get request: " + ex.localizedMessage)
-        } finally {
-            inputStream?.close()
+            inputStream = conn.inputStream
+        } catch (ex: Exception) {
+            Log.d("JLin", "Error when executing get request: " + ex.message)
         }
 
-        return bitmap
+        return inputStream
     }
 }
