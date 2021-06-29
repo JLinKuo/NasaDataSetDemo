@@ -28,7 +28,7 @@ class GalleryViewModel: BaseViewModel() {
     val listNasaData by lazy { ArrayList<NasaItemPojo>() }
     var isGetNasaData = false
 
-    private var _getNasaDataResponse = MutableLiveData<ArrayList<NasaItemPojo>>()
+    private val _getNasaDataResponse = MutableLiveData<ArrayList<NasaItemPojo>>()
     val getNasaDataResponse: LiveData<ArrayList<NasaItemPojo>>
         get() = _getNasaDataResponse
 
@@ -67,7 +67,7 @@ class GalleryViewModel: BaseViewModel() {
         }
     }
 
-    private var _getNasaBitmapResponse = MutableLiveData<NasaBitmapPojo>()
+    private val _getNasaBitmapResponse = MutableLiveData<NasaBitmapPojo>()
     val getNasaBitmapResponse: LiveData<NasaBitmapPojo>
         get() = _getNasaBitmapResponse
 

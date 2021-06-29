@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 class DetailViewModel: BaseViewModel() {
     private val repository = DetailRepository()
 
-    private var _getNasaBitmapResponse = MutableLiveData<Bitmap>()
+    private val _getNasaBitmapResponse = MutableLiveData<Bitmap>()
     val getNasaBitmapResponse: LiveData<Bitmap>
         get() = _getNasaBitmapResponse
 
