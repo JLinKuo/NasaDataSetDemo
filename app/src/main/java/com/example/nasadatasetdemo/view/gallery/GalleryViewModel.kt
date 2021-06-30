@@ -33,12 +33,9 @@ class GalleryViewModel: BaseViewModel() {
         get() = _getNasaDataResponse
 
     fun getNasaData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = repository.getNasaHttpRequest()
-
-            withContext(Dispatchers.Main) {
-                _getNasaDataResponse.value = convertString2List(result)
-            }
+            _getNasaDataResponse.value = convertString2List(result)
         }
     }
 
@@ -72,12 +69,10 @@ class GalleryViewModel: BaseViewModel() {
         get() = _getNasaBitmapResponse
 
     fun getNasaBitmap(position: Int, urlString: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = repository.getNasaHttpBitmap(urlString)
+            _getNasaBitmapResponse.value = NasaBitmapPojo(position, resizeResultBitmap(result))
 
-            withContext(Dispatchers.Main) {
-                _getNasaBitmapResponse.value = NasaBitmapPojo(position, resizeResultBitmap(result))
-            }
         }
     }
 

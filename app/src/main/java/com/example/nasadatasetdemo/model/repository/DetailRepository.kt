@@ -1,10 +1,11 @@
 package com.example.nasadatasetdemo.model.repository
 
-import android.graphics.Bitmap
 import com.example.nasadatasetdemo.model.network.Network
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class DetailRepository: BaseRepository() {
-    fun getNasaHttpBitmap(urlString: String): Bitmap? {
-        return Network.httpGetBitmap(urlString)
+    suspend fun getNasaHttpBitmap(urlString: String) = withContext(Dispatchers.IO) {
+        Network.httpGetBitmap(urlString)
     }
 }

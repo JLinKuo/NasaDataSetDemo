@@ -18,12 +18,9 @@ class DetailViewModel: BaseViewModel() {
         get() = _getNasaBitmapResponse
 
     fun getNasaBitmap(urlString: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = repository.getNasaHttpBitmap(urlString)
-
-            withContext(Dispatchers.Main) {
-                _getNasaBitmapResponse.value = result
-            }
+            _getNasaBitmapResponse.value = result
         }
     }
 }
